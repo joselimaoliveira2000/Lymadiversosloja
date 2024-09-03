@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+
+        }
+        .product {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            float: left;
+            width: 30%;
+        }
+        .product img {
+            max-width: 60%;
+            height: 50%;
+        }
+        .product button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .product button:hover {
+            background-color: #218838;
+        }
+        .cart-link {
+            display: block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .cart-link:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+  <a href="carrinho.html" class="cart-link">Ver Carrinho</a>
+
+    <div id="products"></div>
+ 
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function displayProducts() {
+            const productContainer = document.getElementById('products');
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = doc.getElementById('products-list').children;
+
+                    Array.from(productsList).forEach(product => {
+                        const id = product.getAttribute('data-id');
+                        const name = product.getAttribute('data-name');
+                        const image = product.getAttribute('data-image');
+                        const price = product.getAttribute('data-price');
+
+                        productContainer.innerHTML += `
+                            <div class="product">
+                                <a href="product.html?id=${id}">
+                                    <img src="${image}" alt="${name}">
+                                    <h3>${name}</h3>
+                                    <p>${price}</p>
+                                </a>
+                                <button onclick="addToCart(${id})">Adicionar ao Carrinho</button>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar produtos:', error));
+        }
+
+        function addToCart(productId) {
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = doc.getElementById('products-list').children;
+                    const product = Array.from(productsList).find(p => p.getAttribute('data-id') === String(productId));
+
+                    if (product) {
+                        const productDetails = {
+                            id: productId,
+                            name: product.getAttribute('data-name'),
+                            image: product.getAttribute('data-image'),
+                            price: product.getAttribute('data-price')
+                        };
+
+                        const cartItem = cart.find(item => item.id === productId);
+                        if (cartItem) {
+                            cartItem.quantity++;
+                        } else {
+                            cart.push({ ...productDetails, quantity: 1 });
+                        }
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        alert('Produto adicionado ao carrinho!');
+                    }
+                })
+                .catch(error => console.error('Erro ao adicionar produto ao carrinho:', error));
+        }
+
+        displayProducts();
+    </script>
+</body>
+</html>

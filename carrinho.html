@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <style>
+/* Fontes e base */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.cart {
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart ul li {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    background: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.cart ul li:last-child {
+    border-bottom: none;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.product-info img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 8px;
+}
+
+.product-details {
+    flex: 1;
+}
+
+.quantity-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.quantity-control button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    width: 30px;
+    height: 30px;
+}
+
+.quantity-control button:hover {
+    background-color: #0056b3;
+}
+
+.quantity-control input {
+    width: 40px;
+    text-align: center;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 5px;
+    background: #fafafa;
+}
+
+.total {
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: right;
+}
+
+.item-price {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.primary-btn {
+    background-color: #28a745;
+}
+
+.primary-btn:hover {
+    background-color: #218838;
+}
+
+form {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+form input, form button {
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+form input {
+    width: calc(100% - 22px);
+    border: 1px solid #ddd;
+}
+
+form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Consultas de mídia para dispositivos móveis */
+@media only screen and (max-width: 1200px) {
+    .container {
+        width: 95%;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .title {
+        font-size: 2em;
+    }
+    .cart {
+        padding: 15px;
+    }
+    .cart ul li {
+        padding: 10px;
+    }
+    .product-info img {
+        width: 70px;
+        height: 70px;
+    }
+    .quantity-control button {
+        padding: 4px 8px;
+        font-size: 12px;
+        width: 25px;
+        height: 25px;
+    }
+    .quantity-control input {
+        width: 35px;
+        font-size: 12px;
+    }
+    .total {
+        font-size: 1.1em;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+    .title {
+        font-size: 1.8em;
+    }
+    .cart {
+        padding: 10px;
+    }
+    .cart ul li {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px;
+    }
+    .product-info {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-right: 0;
+    }
+    .product-info img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 10px;
+    }
+    .quantity-control {
+        flex-direction: row;
+        align-items: center;
+        margin-left: 0;
+    }
+    .quantity-control button {
+        width: 25px;
+        height: 25px;
+    }
+    .quantity-control input {
+        width: 30px;
+        font-size: 12px;
+    }
+    .total {
+        font-size: 1em;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .title {
+        font-size: 1.5em;
+    }
+    .cart {
+        padding: 5px;
+    }
+    .cart ul li {
+        padding: 5px;
+    }
+    .product-info img {
+        width: 50px;
+        height: 50px;
+    }
+    .quantity-control button {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+    .quantity-control input {
+        width: 30px;
+        font-size: 10px;
+    }
+    .total {
+        font-size: 0.9em;
+    }
+    form input, form button {
+        font-size: 12px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Carrinho de Compras</h1>
+        <div class="cart">
+            <ul id="cart-list">
+                <!-- Itens do carrinho serão inseridos aqui -->
+            </ul>
+            <div class="total">
+                Total: <span id="total-price">R$ 0,00</span>
+            </div>
+            <button onclick="sendWhatsApp()">Enviar pelo WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Função para mostrar os itens no carrinho
+        function displayCart() {
+            const cartList = document.getElementById('cart-list');
+            cartList.innerHTML = '';
+            cart.forEach((item, index) => {
+                const pricePerUnit = parseFloat(item.price.replace('R$', '').replace(',', '.'));
+                const itemTotalPrice = pricePerUnit * item.quantity;
+                cartList.innerHTML += `
+                    <li>
+                        <div class="product-info">
+                            <img src="${item.image}" alt="${item.name}">
+                            <div>
+                                ${item.name} - <span class="item-price">Unitário: R$ ${pricePerUnit.toFixed(2).replace('.', ',')} | Total: R$ ${itemTotalPrice.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                        <div class="quantity-control">
+                            <button onclick="updateQuantity(${index}, ${item.quantity - 1})">🔽</button>
+                            <input type="number" value="${item.quantity}" readonly>
+                            <button onclick="updateQuantity(${index}, ${item.quantity + 1})">🔼</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">Remover</button>
+                    </li>
+                `;
+            });
+            updateTotal();
+        }
+
+        // Função para adicionar produto ao carrinho
+        function addToCart(name, price, image) {
+            let product = { name: name, price: price, image: image, quantity: 1 };
+            cart.push(product);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Função para atualizar a quantidade de um produto
+        function updateQuantity(index, newQuantity) {
+            if (newQuantity < 1) return; // Evita que a quantidade seja menor que 1
+            cart[index].quantity = newQuantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Função para remover um item do carrinho
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Função para calcular e atualizar o valor total
+        function updateTotal() {
+            let total = 0;
+            cart.forEach(item => {
+                const price = parseFloat(item.price.replace('R$', '').replace(',', '.'));
+                total += price * item.quantity;
+            });
+            document.getElementById('total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        // Função para enviar lista via WhatsApp
+        function sendWhatsApp() {
+            let message = "Produtos selecionados:\n";
+            cart.forEach(item => {
+                message += `- ${item.name} (${item.quantity}x) - Unitário: ${item.price}\n`;
+            });
+            message += `\nTotal: R$ ${document.getElementById('total-price').innerText.split('R$ ')[1]}`;
+            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        
+
+        // Inicializar a página com os itens do carrinho
+        displayCart();
+    </script>
+</body>
+</html>
